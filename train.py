@@ -9,11 +9,14 @@ load_dotenv()
 
 # Dataset directory (with subfolders per class)
 dataset_path = os.getenv("DATASET_PATH", "landmark_dataset")
-model_path = os.getenv("MODEL_PATH", "landmark_model/landmark_model.h5")
-labels_path = os.getenv("LABELS_PATH", "landmark_model/labels.txt")
+if not os.path.exists(dataset_path) and os.path.exists("sample_dataset"):
+    dataset_path = "sample_dataset"
+
+model_path = os.getenv("MODEL_PATH", "landmark_model.keras")
+labels_path = os.getenv("LABELS_PATH", "labels.txt")
 
 if not os.path.exists(dataset_path):
-    raise FileNotFoundError(f"Dataset path '{dataset_path}' not found. Run data.py to collect samples first.")
+    raise FileNotFoundError(f"Dataset path '{dataset_path}' not found. Run generate_synthetic_data.py or data.py first.")
 
 # Load data
 X, y = [], []
@@ -53,11 +56,24 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=20)
 
 # Save model and class labels
-os.makedirs(os.path.dirname(model_path), exist_ok=True)
-os.makedirs(os.path.dirname(labels_path), exist_ok=True)
+if os.path.dirname(model_path):
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+if os.path.dirname(labels_path):
+    os.makedirs(os.path.dirname(labels_path), exist_ok=True)
 
 model.save(model_path)
 with open(labels_path, "w", encoding="utf-8") as f:
+    for name in class_names:
+        f.write(name + "\n")
+
+# Legacy compatibility mirror
+os.makedirs("landmark_model", exist_ok=True)
+if not model_path.endswith(".h5"):
+    try:
+        model.save("landmark_model/landmark_model.h5")
+    except Exception:
+        pass
+with open("landmark_model/labels.txt", "w", encoding="utf-8") as f:
     for name in class_names:
         f.write(name + "\n")
 

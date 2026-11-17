@@ -85,7 +85,15 @@ Adjust variables if needed:
 
 ## 🚀 Usage
 
-### Step 1: Collect Landmark Data
+### Step 1: Generate or Collect Landmark Data
+
+**Option A (Synthetic Canonical Dataset — Fast & Headless)**:
+```bash
+python generate_synthetic_data.py
+```
+- Deterministically generates 1,400 canonical landmark vectors across all 28 classes into `sample_dataset/`.
+
+**Option B (Live Webcam Capture)**:
 ```bash
 python data.py
 ```
@@ -97,12 +105,23 @@ python data.py
 ```bash
 python train.py
 ```
-- Trains a dense neural network (128 → Dropout → 64 → Softmax) on the collected `.npy` samples.
-- Saves the trained model to `landmark_model/landmark_model.h5` and class names to `landmark_model/labels.txt`.
+- Trains a dense neural network (128 → Dropout → 64 → Softmax) in <5 seconds on CPU.
+- Automatically uses `sample_dataset/` if webcam-collected data is not present.
+- Saves the trained model to `landmark_model.keras` (~97 KB) and class names to `labels.txt`.
 
-### Step 3: Run Inference
+### Step 3: Run Inference & Evaluation
 
-**Single-Letter Display**:
+**Headless Mock Evaluation (No camera required)**:
+```bash
+python test.py --mock
+```
+
+**Single Landmark File Inference**:
+```bash
+python test.py --file sample_dataset/A/sample_000.npy
+```
+
+**Live Webcam Inference**:
 ```bash
 python test.py
 ```
