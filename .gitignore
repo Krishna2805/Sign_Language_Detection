@@ -15,15 +15,9 @@ env/
 *.env
 !.env.example
 
-# Local development notes & private backlogs
+# Local development notes & scratch files
 *.local.md
 .*.local.md
-.dev_notes.local.md
-DEFECTS_AND_BACKLOG.md
-*DEFECT*
-*BACKLOG*
-*ISSUE*
-.workspace_notes.md
 
 # Editor / OS
 .vscode/
