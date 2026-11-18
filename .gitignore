@@ -18,6 +18,11 @@ env/
 # Local development notes & private backlogs
 *.local.md
 .*.local.md
+.dev_notes.local.md
+DEFECTS_AND_BACKLOG.md
+*DEFECT*
+*BACKLOG*
+*ISSUE*
 .workspace_notes.md
 
 # Editor / OS
